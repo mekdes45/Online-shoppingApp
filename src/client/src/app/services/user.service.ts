@@ -8,6 +8,7 @@ import { Product } from '../../../../shared/models/product.model';
   providedIn: 'root',
 })
 export class UserService {
+  [x: string]: any;
   selectedUserId = '';
 
   constructor(private api: ApiService) {}
@@ -17,23 +18,17 @@ export class UserService {
     return this.api.get<{ data: User[] }>('users').pipe(map((res) => res.data));
   }
   getProducts() {
-    return this.api.get<{ data: Product[] }>('products').pipe(map((res) => res.data));
+    return this.api.get <{ data: Product[] }>('products').pipe(map((res) => res.data));
   }
   createUser(user: User) {
-    return this.api
-      .post<{ data: User }>('create-user', user)
-      .pipe(map((res) => res.data));
+    return this.api.post<{ data: User }>('create-user', user).pipe(map((res) => res.data));
   }
 
   createProduct(product: Product) {
-    return this.api
-      .post<{ data: Product }>('create-product', product)
-      .pipe(map((res) => res.data));
+    return this.api.post<{ data: Product }>('create-product', product).pipe(map((res) => res.data));
   }
   login(user: Partial<User>) {
-    return this.api
-      .post<{ data: User }>('login', user)
-      .pipe(map((res) => res.data));
+    return this.api .post<{ data: User }>('login', user).pipe(map((res) => res.data));
   }
   updateUser(user: User) {
     return this.api.put<User>('update-user/' + user._id, user);
