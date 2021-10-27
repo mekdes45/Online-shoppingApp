@@ -1,3 +1,4 @@
+
 import express from "express";
 import bcrypt from "bcrypt";
 import cors from "cors";
@@ -6,20 +7,19 @@ import { UserModel } from "./schemas/user.schema.js";
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
 import cookieParser from "cookie-parser";
-import * as socketIO from "socket.io";
+
 import http from 'http';
 import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
+import { ProductModel } from "./schemas/product.schema.js";
 dotenv.config();
 const access_secret = process.env.ACCESS_TOKEN_SECRET as string;
 console.log(access_secret);
 const app = express();
 const server = http.createServer(app);
-// const io = new socketIO.Server(server,  { cors: {
-//   origin: '*'
-// }});
+import path from 'path';
 
-
+const __dirname=path.resolve()
 
 const saltRounds = 10;
 
@@ -27,7 +27,7 @@ const saltRounds = 10;
 const PORT = 3001;
 
 mongoose
-  .connect("mongodb://localhost:27017/test")
+  .connect("mongodb://localhost:27017/test4")
   .then(() => {
     console.log("Connected to DB Successfully");
   })
@@ -35,14 +35,62 @@ mongoose
 
 app.use(cookieParser())
 app.use(cors({
-    credentials: true,
-    origin: ['http://localhost:4200', 'http://localhost:3001', 'http://localhost:8080']
+    origin: ['http://localhost:3001', 'http://localhost:3002',
+    'http://localhost:4200', 'http://localhost:8080']
 }));
 app.use(express.json());
 
 app.get("/", function (req, res) {
   res.json({ message: "test" });
 });
+
+const clientPath = path.join(__dirname, '/dist/client');
+app.use(express.static(clientPath));
+
+
+app.get("/", function (req, res) {
+  const filePath = path.join(__dirname, '/dist/client/index.html');
+  console.log(filePath);
+  res.sendFile(filePath);
+});
+
+
+
+
+app.post('/create-product', function(req,res){
+  const {_id,title,price,description,category,image} = req.body;
+  const product= new ProductModel({
+      _id,
+      title,
+      price,
+      description,
+      category,
+     image
+      
+  });
+  product.save()
+    .then((data: any) => {
+      console.log(data)
+      res.json({data});
+  })
+  .catch((err: any) => {
+      res.status(501);
+      res.json({errors: err});
+  })
+});
+
+app.get('/products', function(req,res){
+  ProductModel.find()
+    .then(data => res.json({
+      data}))
+  .catch(err => {
+      res.status(501)
+      res.json({errors: err});
+  })
+});
+
+
+
 
 app.get("/posts", function (req, res) {
   PostModel.find()
@@ -85,6 +133,8 @@ app.post("/create-user", function (req, res) {
   });
 });
 
+
+
 app.post("/create-post", function (req, res) {
   const { title, body } = req.body;
   const post = new PostModel({
@@ -101,6 +151,8 @@ app.post("/create-post", function (req, res) {
       res.json({ errors: err });
     });
 });
+
+
 
 app.delete("/delete-user/:id", function (req, res) {
   const _id = req.params.id;
