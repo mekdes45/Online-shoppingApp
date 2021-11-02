@@ -24,10 +24,10 @@ const __dirname=path.resolve()
 const saltRounds = 10;
 
 
-const PORT = 3001;
+const PORT = 3002;
 
 mongoose
-  .connect("mongodb://localhost:27017/test4")
+  .connect("mongodb://localhost:27017/Online-Shopping")
   .then(() => {
     console.log("Connected to DB Successfully");
   })
@@ -35,8 +35,8 @@ mongoose
 
 app.use(cookieParser())
 app.use(cors({
-    origin: ['http://localhost:3001', 'http://localhost:3002',
-    'http://localhost:4200', 'http://localhost:8080']
+  credentials: true,
+  origin: ['http://localhost:3002', 'http://localhost:4200', 'http://localhost:3501', 'http://localhost:8080']
 }));
 app.use(express.json());
 
@@ -58,14 +58,13 @@ app.get("/", function (req, res) {
 
 
 app.post('/create-product', function(req,res){
-  const {_id,title,price,description,category,image} = req.body;
+  const {title,price,description,imageurl} = req.body;
   const product= new ProductModel({
-      _id,
+      
       title,
       price,
       description,
-      category,
-     image
+     imageurl
       
   });
   product.save()
