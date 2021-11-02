@@ -6,7 +6,7 @@
           src="https://rukminim1.flixcart.com/flap/128/128/image/f15c02bfeb02d15d.png?q=100"
           alt=""
         />
-        <h6>Products</h6>
+        <h6>All Products</h6>
       </a>
     </div>
 
@@ -40,5 +40,81 @@
         <h6>Jewllery</h6>
       </a>
     </div>
+  </div>
+</div>
+
+<!-- <div class="container">
+  <div class="row">
+    <ng-container *ngFor="let product of productList">
+      <div class="card col-md-3">
+        <img src="{{ product.imageurl }}" alt="" />
+        <h5
+          style="
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100ch;
+          "
+        >
+          {{ product.title }}
+        </h5>
+        <p
+          style="
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100ch;
+          "
+          {{product.description}}
+        ></p>
+        <p><strong>Price:</strong>${{ product.price }}</p>
+        <button class="btn btn-primary">Add to Cart</button>
+      </div>
+    </ng-container>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="row">
+    <ng-container *ngFor="let product of products$ | async">
+      <div class="card col-md-3">
+        <img src="{{ product.imageurl }}" alt="" />
+        <h5
+          style="
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100ch;
+          "
+        >
+          {{ product.title }}
+        </h5>
+
+        <p
+          style="
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100ch;
+          "
+        ></p>
+        <p
+          style="
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100ch;
+          "
+        >
+          {{ product.description }}
+        </p>
+        <p>
+          <strong>price</strong>
+
+          {{ product.price }}
+        </p>
+        <button class="btn btn-primary">Add to Cart</button>
+      </div>
+    </ng-container>
   </div>
 </div>
