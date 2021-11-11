@@ -9,6 +9,9 @@
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 25rem;
 }
+.items{
+  width:64px;
+}
 .item img {
   width: 64px;
 }
@@ -20,14 +23,14 @@
   color: blue;
 }
 .card img {
-  width: 200px;
+  width: 170px;
   height: 150px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   transition: 0.3s ease-in-out;
 }
 
 .card {
-  padding: 20px;
+  // padding: 20px;
   margin: 40px;
 }
 .card img:hover {

@@ -6,7 +6,7 @@ interface AuthRequest extends Request {
   user?: User;
 }
 function authHandle(req: AuthRequest, res: Response, next: NextFunction) {
-  const cookie = req.cookies["jwt"];
+  const cookie = req.cookies["jwt"];//a name of coockie given
   console.log("auth", cookie);
   jwt.verify(
     cookie,

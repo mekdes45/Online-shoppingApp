@@ -1,6 +1,6 @@
-import { ProductService } from './../../../services/product.service';
-import { Product } from './../../../../../../shared/models/product.model';
-import { loadProducts, loadProductsFailure, loadProductsSuccess, createProduct, createProductSuccess,  createProductFailure } from './../../actions/user/user.actions';
+// import { ProductService } from './../../../services/product.service';
+// import { Product } from './../../../../../../shared/models/product.model';
+// import { loadProducts, loadProductsFailure, loadProductsSuccess, createProduct, createProductSuccess,  createProductFailure } from './../../actions/user/user.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
@@ -86,30 +86,30 @@ export class UserEffects {
   )
   );
   
-  loadProducts$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(loadProducts),
-    mergeMap(() =>
-      this.productService.getProducts().pipe(
-        map((data) => loadProductsSuccess({ data })),
-        catchError((error) => of(loadProductsFailure({ error })))
-      )
-    )
-  )
-  );
+//   loadProducts$ = createEffect(() =>
+//   this.actions$.pipe(
+//     ofType(loadProducts),
+//     mergeMap(() =>
+//       this.productService.getProducts().pipe(
+//         map((data) => loadProductsSuccess({ data })),
+//         catchError((error) => of(loadProductsFailure({ error })))
+//       )
+//     )
+//   )
+//   );
   
-  createProduct$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(createProduct),
-    mergeMap((action) =>
-      this.productService.createProduct(action.data).pipe(
-        map((data) => createProductSuccess({ data })),
-        catchError((error) => of(createProductFailure({ error })))
-      )
-    )
-  )
-);
+//   createProduct$ = createEffect(() =>
+//   this.actions$.pipe(
+//     ofType(createProduct),
+//     mergeMap((action) =>
+//       this.productService.createProduct(action.data).pipe(
+//         map((data) => createProductSuccess({ data })),
+//         catchError((error) => of(createProductFailure({ error })))
+//       )
+//     )
+//   )
+// );
 
 
-  constructor(private actions$: Actions, private userService: UserService ,private productService: ProductService) {}
+  constructor(private actions$: Actions, private userService: UserService ) {}
 }

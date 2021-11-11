@@ -1,30 +1,21 @@
-import { Router } from '@angular/router';
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store';
-import {
-  createUser,
-  loginUser,
-  updateUser,
-} from 'src/app/store/actions/user/user.actions';
+import { createUser, loginUser, updateUser } from 'src/app/store/actions/user/user.actions';
 import { User } from '../../../../../shared/models/user.model';
 
 @Component({
-  selector: 'app-user-input',
-  templateUrl: './user-input.component.html',
-  styleUrls: ['./user-input.component.scss'],
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.component.html',
+  styleUrls: ['./sign-up.component.scss']
 })
-export class UserInputComponent implements OnInit, OnChanges {
+export class SignUpComponent implements OnInit, OnChanges{
+
   addUser: FormGroup;
   @Input() selectedUser: User | null = null;
-  constructor(private fb: FormBuilder, private store: Store<AppState>,private router:Router) {
+  constructor(private fb: FormBuilder, private router:Router, private store: Store<AppState>) {
     this.addUser = this.fb.group({
       name: ['', Validators.required],
       email: [
@@ -47,9 +38,10 @@ export class UserInputComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.selectedUser?.currentValue) {
       const user = changes?.selectedUser?.currentValue;
-      // this.addUser.get('name')?.setValue(user.name);
+      this.addUser.get('name')?.setValue(user.name);
       this.addUser.get('email')?.setValue(user.email);
-      // this.addUser.get('username')?.setValue(user.username);
+      this.addUser.get('username')?.setValue(user.username);
+      this.addUser.get('password')?.setValue(user.password);
       this.addUser.updateValueAndValidity();
     }
   }
@@ -61,10 +53,12 @@ export class UserInputComponent implements OnInit, OnChanges {
           updateUser({ data: { ...selectedUser, ...this.addUser.value } })
         );
     this.addUser.reset();
-
+    this.router.navigate(["login"])
   }
+
 
   login() {
     this.store.dispatch(loginUser({ data: this.addUser.value }))
   }
 }
+

@@ -11,21 +11,19 @@ export class ApiService {
   { }
 
   get<T>(resourceName: string) {
-    return this.http.get<T>(this.baseUrl + resourceName, {
-      withCredentials: true
+    return this.http.get<T>(this.baseUrl + resourceName, { withCredentials: true
     });
   }
-  post<T>(resourceName: string, data: Postable) {
-    return this.http.post<T>(this.baseUrl + resourceName, data, {
-      withCredentials: true
+  post<T>(resourceName: string, data: any) {
+    return this.http.post<T>(this.baseUrl + resourceName, data, { withCredentials: true
     });
   }
 
   delete<T>(resourceName: string) {
-    return this.http.delete<T>(this.baseUrl + resourceName);
+    return this.http.delete<T>(this.baseUrl + resourceName,{ withCredentials: true});
   }
 
-  put<T>(resourceName: string, data: Postable) {
-    return this.http.put<T>(this.baseUrl + resourceName, data);
+  put<T>(resourceName: string, data: any) {
+    return this.http.put<T>(this.baseUrl + resourceName, data,{ withCredentials: true});
   }
 }

@@ -13,10 +13,10 @@ export const selectedUserSelector = createSelector(
   userFeatureSelector,
   (state) => state.selectedUser
 )
-export const productSelector = createSelector(
-  userFeatureSelector,
-  (state) => state.products
-)
+// export const productSelector = createSelector(
+//   userFeatureSelector,
+//   (state) => state.products
+// )
 
 
 

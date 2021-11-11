@@ -6,6 +6,8 @@ export interface Product {
     title: string,
     price: number,
     description: string,
- 
-    imageurl:string,
+    imageurl: string,
+    quantity: number,
+    total:number,
+   
 }

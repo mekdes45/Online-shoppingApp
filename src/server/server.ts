@@ -1,14 +1,14 @@
-
+import { CartModel } from "./schemas/cart.schema.js";
 import express from "express";
 import bcrypt from "bcrypt";
 import cors from "cors";
 import { PostModel } from "./schemas/post.schema.js";
 import { UserModel } from "./schemas/user.schema.js";
 import mongoose from "mongoose";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-import http from 'http';
+import http from "http";
 import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
 import { ProductModel } from "./schemas/product.schema.js";
@@ -17,12 +17,11 @@ const access_secret = process.env.ACCESS_TOKEN_SECRET as string;
 console.log(access_secret);
 const app = express();
 const server = http.createServer(app);
-import path from 'path';
+import path from "path";
 
-const __dirname=path.resolve()
+const __dirname = path.resolve();
 
 const saltRounds = 10;
-
 
 const PORT = 3002;
 
@@ -33,63 +32,66 @@ mongoose
   })
   .catch((err) => console.log("Failed to Connect to DB", err));
 
-app.use(cookieParser())
-app.use(cors({
-  credentials: true,
-  origin: ['http://localhost:3002', 'http://localhost:4200', 'http://localhost:3501', 'http://localhost:8080']
-}));
+app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      "http://localhost:3002",
+      "http://localhost:4200",
+      "http://localhost:3501",
+      "http://localhost:8080",
+    ],
+  })
+);
 app.use(express.json());
 
 app.get("/", function (req, res) {
   res.json({ message: "test" });
 });
 
-const clientPath = path.join(__dirname, '/dist/client');
+const clientPath = path.join(__dirname, "/dist/client");
 app.use(express.static(clientPath));
 
-
 app.get("/", function (req, res) {
-  const filePath = path.join(__dirname, '/dist/client/index.html');
+  const filePath = path.join(__dirname, "/dist/client/index.html");
   console.log(filePath);
   res.sendFile(filePath);
 });
 
-
-
-
-app.post('/create-product', function(req,res){
-  const {title,price,description,imageurl} = req.body;
-  const product= new ProductModel({
-      
-      title,
-      price,
-      description,
-     imageurl
-      
+app.post("/create-product", function (req, res) {
+  const { title, price, description, imageurl, quantity } = req.body;
+  const product = new ProductModel({
+    title,
+    price,
+    description,
+    imageurl,
+    quantity,
+    
   });
-  product.save()
+  product
+    .save()
     .then((data: any) => {
-      console.log(data)
-      res.json({data});
-  })
-  .catch((err: any) => {
+      console.log(data);
+      res.json({ data });
+    })
+    .catch((err: any) => {
       res.status(501);
-      res.json({errors: err});
-  })
+      res.json({ errors: err });
+    });
 });
-
-app.get('/products', function(req,res){
+app.get("/products", authHandler, function (req, res) {
   ProductModel.find()
-    .then(data => res.json({
-      data}))
-  .catch(err => {
-      res.status(501)
-      res.json({errors: err});
-  })
+    .then((data) =>
+      res.json({
+        data,
+      })
+    )
+    .catch((err) => {
+      res.status(501);
+      res.json({ errors: err });
+    });
 });
-
-
-
 
 app.get("/posts", function (req, res) {
   PostModel.find()
@@ -99,9 +101,8 @@ app.get("/posts", function (req, res) {
       res.json({ errors: err });
     });
 });
-
 app.get("/users", authHandler, function (req: any, res) {
-  UserModel.find({}, '-password')
+  UserModel.find({email:req.user.email}, "-password")
     .then((data) => res.json({ data }))
     .catch((err) => {
       res.status(501);
@@ -110,7 +111,6 @@ app.get("/users", authHandler, function (req: any, res) {
 });
 app.post("/create-user", function (req, res) {
   const { name, email, username, password } = req.body;
-
   bcrypt.genSalt(saltRounds, function (err, salt) {
     bcrypt.hash(password, salt, function (err, hash) {
       const user = new UserModel({
@@ -124,6 +124,13 @@ app.post("/create-user", function (req, res) {
         .then((data) => {
           res.json({ data });
         })
+        .then(() => {
+          const cart = new CartModel({
+            user: user._id,
+          });
+          cart
+            .save()
+        })
         .catch((err) => {
           res.status(501);
           res.json({ errors: err });
@@ -131,8 +138,6 @@ app.post("/create-user", function (req, res) {
     });
   });
 });
-
-
 
 app.post("/create-post", function (req, res) {
   const { title, body } = req.body;
@@ -150,8 +155,6 @@ app.post("/create-post", function (req, res) {
       res.json({ errors: err });
     });
 });
-
-
 
 app.delete("/delete-user/:id", function (req, res) {
   const _id = req.params.id;
@@ -181,22 +184,54 @@ app.put("/update-user/:id", function (req, res) {
   );
 });
 
+app.get("/cart", authHandler, function (req: any, res) {
+  CartModel.findOne( 
+    {user:req.user._id}
+  ).populate('items')
+    .then((data) => res.json({ data }))
+    .catch((err) => {
+      res.status(501);
+      res.json({ errors: err });
+    });
+});
+app.put("/update-cart",authHandler, function (req:any, res) {
+  console.log("Update cart", req.user)
+  console.log(req.body)
+  CartModel.findOneAndUpdate(
+    {user:req.user._id},
+    {
+      $push: { items:req.body._id},
+    },
+    {
+      new: true,
+    },
+    function (err, updateCart) {
+      if (err) {
+        res.send("Error updating cart");
+      } else {
+        res.json(updateCart);
+      }
+    }
+  );
+});
+
+
 app.post("/login", function (req, res) {
   const { email, password } = req.body;
 
   UserModel.findOne({ email })
     .then((user) => {
-        console.log(user);
-      
+      console.log(user);
+
       bcrypt.compare(password, `${user?.password}`, function (err, result) {
         if (result) {
           console.log("It matches!");
-          const accessToken = jwt.sign({user}, access_secret)
-          res.cookie('jwt', accessToken, {
-              httpOnly: true,
-              maxAge: 60 * 1000,
-          })
-          res.json({message: 'Successfully Logged In'})
+          const accessToken = jwt.sign({ user }, access_secret);
+          res.cookie("jwt", accessToken, {
+            httpOnly: true,
+            maxAge:60*60* 1000,
+          });
+          res.json({ data:user});
         } else {
           res.sendStatus(403);
         }
@@ -207,22 +242,21 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.get('logout', function(req, res){
-    res.cookie('jwt', '', {
-        httpOnly: true,
-        maxAge: 0,
-    })
-    res.json({message: 'Successfully Logged Out'})
+app.get("logout", function (req, res) {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    maxAge: 0,
+  });
+  res.json({ message: "Successfully Logged Out" });
 });
 
-app.get('/check-login', authHandler, (req, res) => {
-  res.json({message: 'yes'});
-})
+app.get("/check-login", authHandler, (req, res) => {
+  res.json({ message: "yes" });
+});
 
 server.listen(PORT, function () {
   console.log(`starting at localhost http://localhost:${PORT}`);
 });
-
 
 // io.on('connection', function(socket){
 //   console.log('a user connected');
@@ -231,4 +265,3 @@ server.listen(PORT, function () {
 //     console.log('user disconnected');
 //   });
 // });
-

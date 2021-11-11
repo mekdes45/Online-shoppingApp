@@ -8,7 +8,7 @@ import { User } from '../../../../shared/models/user.model';
   providedIn: 'root',
 })
 export class UserService {
-  [x: string]: any;
+
   selectedUserId = '';
 
   constructor(private api: ApiService) {}

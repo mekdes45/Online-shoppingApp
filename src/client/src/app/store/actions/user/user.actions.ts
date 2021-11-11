@@ -82,32 +82,32 @@ export const loginUserFailure = createAction(
   props<{ error: Error }>()
 );
 
-export const loadProducts = createAction(
-  '[User] Load Products'
-);
+// export const loadProducts = createAction(
+//   '[User] Load Products'
+// );
 
-export const loadProductsSuccess = createAction(
-  '[User] Load Products Success',
-  props<{ data: Product[] }>()
-);
+// export const loadProductsSuccess = createAction(
+//   '[User] Load Products Success',
+//   props<{ data: Product[] }>()
+// );
 
-export const loadProductsFailure = createAction(
-  '[User] Load Products Failure',
-  props<{ error: Error }>()
-);
+// export const loadProductsFailure = createAction(
+//   '[User] Load Products Failure',
+//   props<{ error: Error }>()
+// );
 
-export const createProduct = createAction(
-  '[User] Create Product',
-  props<{data: Product}>()
-);
+// export const createProduct = createAction(
+//   '[User] Create Product',
+//   props<{data: Product}>()
+// );
 
-export const createProductSuccess = createAction(
-  '[User] Create Product Success',
-  props<{ data: Product }>()
-);
+// export const createProductSuccess = createAction(
+//   '[User] Create Product Success',
+//   props<{ data: Product }>()
+// );
 
-export const createProductFailure = createAction(
-  '[User] Create Product Failure',
-  props<{ error: Error }>()
-);
+// export const createProductFailure = createAction(
+//   '[User] Create Product Failure',
+//   props<{ error: Error }>()
+// );
 
