@@ -19,6 +19,16 @@ import { PageLoginComponent } from './pages/page-login/page-login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CartComponent } from './components/cart/cart.component';
 import { PrductsComponent } from './components/prducts/prducts.component';
+import { AddProductComponent } from './components/add-product/add-product.component';
+import { ProductEffects } from './store/effects/product/product.effects';
+import * as fromProduct from './store/reducers/product/product.reducer';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import * as fromCart from './store/reducers/cart/cart.reducer';
+import { CartEffects } from './store/effects/cart/cart.effects';
+// import { ProductListComponent } from './components/product-list/product-list.component';
+// import { FilterPipe } from './shared/filter.pipe';
 
 
 @NgModule({
@@ -30,7 +40,13 @@ import { PrductsComponent } from './components/prducts/prducts.component';
     PageLoginComponent,
     HeaderComponent,
     CartComponent,
-    PrductsComponent
+    PrductsComponent,
+    AddProductComponent,
+    PageNotFoundComponent,
+  
+    SignUpComponent,
+    // ProductListComponent,
+    // FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -41,7 +57,9 @@ import { PrductsComponent } from './components/prducts/prducts.component';
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreModule.forFeature(fromUser.userFeatureKey, fromUser.reducer),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot([UserEffects, ProductEffects, CartEffects]),
+    StoreModule.forFeature(fromProduct.productFeatureKey, fromProduct.reducer),
+    StoreModule.forFeature(fromCart.cartFeatureKey, fromCart.reducer),
    
   ],
   providers: [],
