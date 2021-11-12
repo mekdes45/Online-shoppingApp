@@ -17,9 +17,9 @@ export class CartService {
   selectedCartId = '';
   constructor(private api: ApiService) { }
   
-  createCart(cart: Cart) {
-    return this.api.post<{ data: Cart }>('create-cart', cart).pipe(map((res) => res.data));
-  }
+  // createCart(cart: Cart) {
+  //   return this.api.post<{ data: Cart }>('create-cart', cart).pipe(map((res) => res.data));
+  // }
   
   getProducts() {
     return this.productList.asObservable();
@@ -34,45 +34,46 @@ export class CartService {
   addToCart(product: any) {
     this.cartItemList.push(product);
     this.productList.next(this.cartItemList);
-    this.getTotalPrice();
+    // this.getTotalPrice();
     console.log(this.cartItemList);
     // return product;
     
   }
   
-  getTotalPrice(): number {
-    let grandTotal = 0;
-    this.cartItemList.map((add: any) => {
-      grandTotal += add.total;
-    })
-    return grandTotal;
-  }
-  removeCartItem(product: Cart) {
-    this.cartItemList.map((add: any, index: any) => {
-      if (product.id === add.id) {
-        this.cartItemList.splice(index, 1);
-      }
-    })
-    this.productList.next(this.cartItemList);
-  }
+  // getTotalPrice(): number {
+  //   let grandTotal = 0;
+  //   this.cartItemList.map((add: any) => {
+  //     grandTotal += add.total;
+  //   })
+  //   return grandTotal;
+  // }
+  // removeCartItem(product: Cart) {
+  //   this.cartItemList.map((add: any, index: any) => {
+  //     if (product.id === add.id) {
+  //       this.cartItemList.splice(index, 1);
+  //     }
+  //   })
+  //   this.productList.next(this.cartItemList);
+  // }
 
-  removeAllCart() {
-    this.cartItemList = []
-    this.productList.next(this.cartItemList);
-  }
+  // removeAllCart() {
+  //   this.cartItemList = []
+  //   this.productList.next(this.cartItemList);
+  // }
 
-  getCart() {
-    return this.api.get<{ data:Cart }>('cart').pipe(map((res) => res.data));
+  getCart(){
+    return this.api.get<{ data: Cart }>('cart')
+    .pipe(map((res) => res.data));
   }
   updateProductCart(product: Product) {
-    console.log('update cart',product);
-    return this.api.put<Cart>('update-cart' ,product)
+    console.log("Update Cart In The Service",product)
+    return this.api.put<Cart>('update-cart', product);
   }
   
 
  
-  // selectCart(id: string) {
-  //   this.selectedCartId = id;
-  // }
+  selectCart(id: string) {
+    this.selectedCartId = id;
+  }
   
 }
