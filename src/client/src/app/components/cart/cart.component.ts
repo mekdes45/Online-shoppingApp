@@ -14,27 +14,14 @@ import { cartSelector } from 'src/app/store/selectors/cart/cart.selectors';
 })
 export class CartComponent implements OnInit {
   cart$:Observable<Cart |null>
-  public products: any = [];
-  public grandTotal !: number;
+ 
   constructor(private cartService:CartService,private store:Store<AppState>) {
     this.cart$=this.store.select(cartSelector)
   }
 
   ngOnInit(): void {
     this.store.dispatch(loadcart())
-    this.cartService.getProducts().subscribe(res => {
-      this.products = res;
-      this.grandTotal = this.cartService.getTotalPrice();
-    })
+    
   }
-  removeItem(product: any) {
-    this.cartService.removeCartItem(product);
-
-  }
-  
-  emptyCart() {
-    this.cartService.removeAllCart()
-  }
-
 
 }
