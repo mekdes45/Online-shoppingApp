@@ -18,21 +18,17 @@
     <a class="btn btn-outline-primary" [routerLink]="['/sign-up']">Sign-up</a>
     <a class="btn btn-outline-primary" [routerLink]="['/login']">login</a>
 </div>
-
-
-    <button routerLink="cart" class="byt-primary">
-      <i style="font-size: 30px" class="fas fa-cart-plus"></i>
-      <div style="font-size: 10px" class="badge bg-danger">{{ totalItem }}</div>
-    </button>
-  </div>
-  
-</header>
-
- <ng-container *ngIf="(cart$ | async) as cart">
-   <ng-container *ngIf="(cart.items)as items" >
+<ng-container *ngIf="(cart$ | async) as cart">
+  <ng-container *ngIf="(cart.items)as items" >
 <button routerLink="cart" class="byt-primary">
 <i style="font-size: 30px" class="fas fa-cart-plus"></i>
 <span style="font-size: 10px" class="badge bg-danger">{{ items.length}}</span>
 </button>
 </ng-container>
 </ng-container>
+
+  </div>
+  
+</header>
+
+ 

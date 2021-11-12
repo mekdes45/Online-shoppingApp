@@ -123,13 +123,11 @@ app.post("/create-user", function (req, res) {
         .save()
         .then((data) => {
           res.json({ data });
-        })
-        .then(() => {
+        }).then(()=>{
           const cart = new CartModel({
             user: user._id,
-          });
-          cart
-            .save()
+          })
+          cart.save()
         })
         .catch((err) => {
           res.status(501);
@@ -185,7 +183,7 @@ app.put("/update-user/:id", function (req, res) {
 });
 
 app.get("/cart", authHandler, function (req: any, res) {
-  CartModel.findOne( 
+  CartModel.findOne(
     {user:req.user._id}
   ).populate('items')
     .then((data) => res.json({ data }))
@@ -195,12 +193,11 @@ app.get("/cart", authHandler, function (req: any, res) {
     });
 });
 app.put("/update-cart",authHandler, function (req:any, res) {
-  console.log("Update cart", req.user)
-  console.log(req.body)
+  console.log("update User", req.user)
   CartModel.findOneAndUpdate(
     {user:req.user._id},
     {
-      $push: { items:req.body._id},
+      $push: { items:req.body._id },
     },
     {
       new: true,
@@ -214,7 +211,6 @@ app.put("/update-cart",authHandler, function (req:any, res) {
     }
   );
 });
-
 
 app.post("/login", function (req, res) {
   const { email, password } = req.body;
