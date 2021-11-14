@@ -186,6 +186,7 @@ app.get("/cart", authHandler, function (req: any, res) {
   CartModel.findOne(
     {user:req.user._id}
   ).populate('items')
+    .populate('user')
     .then((data) => res.json({ data }))
     .catch((err) => {
       res.status(501);
@@ -212,6 +213,24 @@ app.put("/update-cart",authHandler, function (req:any, res) {
   );
 });
 
+app.put("/delete-cart/:id",authHandler, function (req:any, res) {
+  CartModel.findOneAndUpdate(
+    {user:req.user._id},
+    {
+      $pull: { items:req.params.id },
+    },
+    {
+      new: true,
+    },
+    function (err, deleteItemFromCart) {
+      if (err) {
+        res.send("Error delete Items from cart");
+      } else {
+        res.json(deleteItemFromCart);
+      }
+    }
+  ).populate('items')
+});
 app.post("/login", function (req, res) {
   const { email, password } = req.body;
 
