@@ -1,7 +1,7 @@
 import { CartService } from 'src/app/services/cart.service';
 import { Cart } from './../../../../../../shared/models/cart.model';
 import { Action, createReducer, on } from '@ngrx/store';
-import { loadcartSuccess, selectcartAction, updatecartSuccess } from '../../actions/cart/cart.actions';
+import { deleteCartSuccess, loadcartSuccess, selectcartAction, updatecartSuccess } from '../../actions/cart/cart.actions';
 
 
 
@@ -27,6 +27,9 @@ export const reducer = createReducer(
  
 
   on(updatecartSuccess, (state, action) => {
+    return {...state, cart:action.data }
+  }),
+  on(deleteCartSuccess, (state, action) => {
     return {...state, cart:action.data }
   }),
   
