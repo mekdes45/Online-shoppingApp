@@ -69,7 +69,13 @@ export class CartService {
     console.log("Update Cart In The Service",product)
     return this.api.put<Cart>('update-cart', product);
   }
+  deleteProductCart(product: Product) {
+    console.log("Delete Cart In The Service",product)
+    return this.api. put<Cart>('delete-cart/' + product._id, product)
+  }
   
+ 
+
 
  
   selectCart(id: string) {
