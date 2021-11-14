@@ -27,8 +27,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import * as fromCart from './store/reducers/cart/cart.reducer';
 import { CartEffects } from './store/effects/cart/cart.effects';
-// import { ProductListComponent } from './components/product-list/product-list.component';
-// import { FilterPipe } from './shared/filter.pipe';
+import { FilterPipe } from './shared/filter.pipe';
+
 
 
 @NgModule({
@@ -45,8 +45,8 @@ import { CartEffects } from './store/effects/cart/cart.effects';
     PageNotFoundComponent,
   
     SignUpComponent,
-    // ProductListComponent,
-    // FilterPipe
+       FilterPipe,
+    
   ],
   imports: [
     BrowserModule,
