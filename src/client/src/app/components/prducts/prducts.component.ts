@@ -18,9 +18,11 @@ import { Cart } from '../../../../../shared/models/cart.model';
   styleUrls: ['./prducts.component.scss']
 })
 export class PrductsComponent implements OnInit {
-  products$: Observable<Product[]>
+  products$: Observable<Product[] | any>
+
   // cart$:Observable<Cart |null >
   public productList: any;
+  searchkey: string = "";
 
   constructor(private store: Store<AppState>,private productService: ProductService,private cartService:CartService) {
     this.products$ = this.store.select(productsSelector)
@@ -39,6 +41,9 @@ export class PrductsComponent implements OnInit {
       this.productList.forEach((a: any) => {
         Object.assign(a, { quantity: 1, total: a.price });
       })
+    })
+    this.cartService.search.subscribe((val:any) => {
+      this.searchkey = val;
     })
   }
   // addtocarts(product:Product) {
