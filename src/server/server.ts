@@ -194,7 +194,7 @@ app.get("/cart", authHandler, function (req: any, res) {
     });
 });
 app.put("/update-cart",authHandler, function (req:any, res) {
-  console.log("update User", req.user)
+  console.log("update Cart", req.user)
   CartModel.findOneAndUpdate(
     {user:req.user._id},
     {
@@ -213,7 +213,9 @@ app.put("/update-cart",authHandler, function (req:any, res) {
   );
 });
 
-app.put("/delete-cart/:id",authHandler, function (req:any, res) {
+app.put("/delete-cart/:id", authHandler, function (req: any, res) {
+  console.log('delete product from cart');
+  
   CartModel.findOneAndUpdate(
     {user:req.user._id},
     {
