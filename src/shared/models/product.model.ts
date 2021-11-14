@@ -7,7 +7,7 @@ export interface Product {
     price: number,
     description: string,
     imageurl: string,
-    quantity: number,
+    quantity?: number,
    
    
 }
