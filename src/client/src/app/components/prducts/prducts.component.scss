@@ -19,7 +19,7 @@
   margin: 0px 15px;
   text-align: center;
 }
-.item a:hover {
+.product a:hover {
   color: blue;
 }
 .card img {
@@ -36,4 +36,14 @@
 .card img:hover {
   transition: 0.3s ease-in-out;
   transform: scale(1.1);
+}
+.content{
+ display: flex;
+
+
+}
+.btn{
+  font-size: small;
+  margin-bottom: 7px;
+ 
 }

@@ -2,7 +2,7 @@
 <div class="card-top container-fluid">
   <div class="container d-flex">
     <div class="item">
-      <a>
+      <a (click)=" filter('')">
         <img
           src="https://rukminim1.flixcart.com/flap/128/128/image/f15c02bfeb02d15d.png?q=100"
           alt=""
@@ -13,7 +13,7 @@
    
 
     <div class="item">
-      <a>
+      <a (click)=" filter('Electronics')">
         <img
           src="https://rukminim1.flixcart.com/flap/128/128/image/69c6589653afdb9a.png?q=100"
           alt=""
@@ -23,7 +23,7 @@
     </div>
 
     <div class="item">
-      <a>
+      <a  (click)=" filter('fashion')">
         <img
           src="https://rukminim1.flixcart.com/flap/128/128/image/82b3ca5fb2301045.png?q=100"
           alt=""
@@ -33,7 +33,7 @@
     </div>
 
     <div class="item">
-      <a>
+      <a  (click)=" filter('perfume')">
         <img  style="width: 62px; margin-top: 12px; height: 50px;"
           src="https://m.media-amazon.com/images/I/61N1FiR9TSL._AC_UL480_FMwebp_QL65_.jpg"
           alt=""
@@ -42,7 +42,7 @@
       </a>
     </div>
     <div class="item">
-      <a>
+      <a  (click)=" filter('jewllery')">
         <img
           style="width: 62px; margin-top: 5px"
           src="https://rukminim1.flixcart.com/image/580/696/kkh6zrk0/jewellery-set/o/w/z/gt-ns-862-matushri-art-original-imafzt9teacakjyn.jpeg?q=50"
@@ -53,7 +53,7 @@
       </a>
     </div>
     <div class="item">
-      <a>
+      <a  (click)=" filter('book')">
         <img
           style="width: 62px; margin-top: 5px"
           src="https://images-na.ssl-images-amazon.com/images/I/91b-wEZiKuL._UX300__PJku-sticker-v7,TopRight,0,-50_AC_UL254_SR254,254_.jpg"
@@ -67,9 +67,12 @@
 </div>
 
     
-<div class="container">
+<div class="container" >
   <div class="row">
-    <ng-container *ngFor="let product of products$ | async | filter:searchkey:'title'">
+    
+
+    <ng-container *ngFor="let product of filterCategory | filter:searchkey:'title'">
+
       <div class="card col-md-3">
         <img src="{{ product.imageurl }}" alt="" />
         <h5
@@ -80,7 +83,7 @@
             max-width: 100ch;
           "
         >
-          {{ product.title }}
+          <a href="#"> </a>{{ product.title }}
         </h5>
 
         <p
@@ -99,17 +102,21 @@
             max-width: 100ch;
           "
         >
-          {{ product.description }}
+         {{ product.description }}>
         </p>
         <p>
           <strong>price</strong>
 
-          {{ product.price }}
+          ${{ product.price }}
         </p>
-
-        <button class="btn btn-primary" (click)="addtocart(product)">
-          Add to Cart
-        </button>
+          
+             <!-- <span *ngFor="let item of cart.items"> -->
+              <button class="btn btn-primary" (click)="addtocart(product)">
+                Add to Cart
+              </button>
+             <!-- </span> -->
+           
+       
       </div>
     </ng-container>
   </div>
