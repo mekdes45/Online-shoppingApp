@@ -25,18 +25,31 @@
 }
 .card img {
   width: 170px;
-  height: 150px;
+  height: 125px;
   margin-bottom: 5px;
   transition: 0.3s ease-in-out;
 }
 
 .card {
-  // padding: 20px;
+  height: 60vh;
+  padding: 25px;
   margin: 40px;
 }
 .card img:hover {
   transition: 0.3s ease-in-out;
   transform: scale(1.1);
+}
+.center img{
+  text-decoration: none;
+  color: inherit;
+  border: none;
+}
+.center{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
 }
 
 
