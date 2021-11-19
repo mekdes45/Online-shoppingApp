@@ -15,6 +15,8 @@ export class AddProductComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
     this.addProduct = this.fb.group({
+   
+      
       title: ['', Validators.required],
       price: [
         '',
@@ -28,6 +30,12 @@ export class AddProductComponent implements OnInit {
         '',
         Validators.compose([Validators.required, Validators.minLength(5)]),
       ],
+      quantity: [
+        '',
+        Validators.compose([Validators.required,Validators.minLength(0)]),
+      ],
+      
+     
   
     });
   }
