@@ -1,31 +1,36 @@
-
 <div class="container">
-<header class="register">Register</header>
-<form [formGroup]="addUser">
-  <input
-    class="namee"
-    type="text"
-    formControlName="name"
-    placeholder="name"
-  />
-  <input
-    class="emaill"
-    type="text"
-    formControlName="email"
-    placeholder="email"
-  />
-  <input
-    class="usernamee"
-    type="text"
-    formControlName="username"
-    placeholder="username"
-  />
-  <input
-    class="pass"
-    type="text"
-    formControlName="password"
-    placeholder="password"
-  />
-  <button class="name" (click)='postUser(selectedUser)' [disabled]='addUser.invalid'>{{(selectedUser) ? 'Update User' : "Add User"}}</button> 
-</form>
+  <header class="register">Register</header>
+  <form [formGroup]="addUser">
+    <input
+      class="namee"
+      type="text"
+      formControlName="name"
+      placeholder="name"
+    />
+    <input
+      class="emaill"
+      type="text"
+      formControlName="email"
+      placeholder="email"
+    />
+    <input
+      class="usernamee"
+      type="text"
+      formControlName="username"
+      placeholder="username"
+    />
+    <input
+      class="pass"
+      type="password"
+      formControlName="password"
+      placeholder="password"
+    />
+    <button
+      class="name"
+      (click)="postUser(selectedUser)"
+      [disabled]="addUser.invalid"
+    >
+      {{ selectedUser ? "Update User" : "Add User" }}
+    </button>
+  </form>
 </div>
