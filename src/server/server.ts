@@ -185,36 +185,65 @@ app.put("/update-user/:id", function (req, res) {
 app.get("/cart", authHandler, function (req: any, res) {
   CartModel.findOne(
     {user:req.user._id}
-  ).populate('items')
-    .populate('user')
+  ).populate('user items.product')
     .then((data) => res.json({ data }))
     .catch((err) => {
       res.status(501);
       res.json({ errors: err });
     });
 });
-app.put("/update-cart",authHandler, function (req:any, res) {
-  console.log("update Cart", req.user)
-  CartModel.findOneAndUpdate(
+
+app.put("/update-cart", authHandler, function (req: any, res) {
+  CartModel.findOne(
     {user:req.user._id},
-    {
-      $push: { items:req.body._id },
-    },
-    {
-      new: true,
-    },
-    function (err, updateCart) {
-      if (err) {
-        res.send("Error updating cart");
-      } else {
-        res.json(updateCart);
-      }
+  
+  ).populate('items.product').then(cart => {
+    console.log(cart, "Cart")
+    if(cart) {
+      console.log(req.body, req.body._id, cart.items[0])
+      const item = cart.items.find(item => item.product._id == req.body._id)
+      console.log(item, "item")
+     if(item) {
+       item.quantity++
+     } else {
+       cart.items.push({product:req.body._id, quantity:1})
+     }
+     cart.save()
+     .then(updatedCart => res.json(cart))
     }
-  );
+
+  })
+   
 });
 
+
+
+app.put("/remove-cart-item",authHandler, function (req:any, res) {
+  console.log("remove from cart Cart", req.user)
+  CartModel.findOne(
+    {user:req.user._id},
+  
+  ).then(cart => {
+    if(cart) {
+      const item = cart.items.find(item => item.product == req.body._id)
+     if(item) {
+       item.quantity--;
+       if(item.quantity <1){
+         cart.items.splice(cart.items.findIndex(ii => ii == item ),1)
+       }
+     }
+   cart?.save().then((updatedCart)=> {
+  CartModel.populate(updatedCart, "items.product").then((populatedCart)=> {
+    res.json(populatedCart)
+   })
+ })  
+    }
+  })
+});
+
+
 app.put("/delete-cart/:id", authHandler, function (req: any, res) {
-  console.log('delete product from cart');
+  console.log('delete product from');
   
   CartModel.findOneAndUpdate(
     {user:req.user._id},
