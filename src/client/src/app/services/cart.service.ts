@@ -13,61 +13,53 @@ import { map } from 'rxjs/operators';
 })
 export class CartService {
   public cartItemList: any = [];
-  public productList = new BehaviorSubject<any>([])
+  public product = new BehaviorSubject<any>([])
   public search = new BehaviorSubject<string>("");
-  
+
   selectedCartId = '';
   constructor(private api: ApiService) { }
   
-  // createCart(cart: Cart) {
-  //   return this.api.post<{ data: Cart }>('create-cart', cart).pipe(map((res) => res.data));
-  // }
+  
   
   getProducts() {
-    return this.productList.asObservable();
+    return this.product.asObservable();
   }
 
   setProduct(product: any) {
     this.cartItemList.push(...product);
-    this.productList.next(product);
+    this.product.next(product);
     
   }
 
   addToCart(product: any) {
     this.cartItemList.push(product);
-    this.productList.next(this.cartItemList);
+    this.product.next(this.cartItemList);
     // this.getTotalPrice();
     console.log(this.cartItemList);
     // return product;
     
   }
   
-  // getTotalPrice(): number {
-  //   let grandTotal = 0;
-  //   this.cartItemList.map((add: any) => {
-  //     grandTotal += add.total;
-  //   })
-  //   return grandTotal;
-  // }
-  // removeCartItem(product: Cart) {
-  //   this.cartItemList.map((add: any, index: any) => {
-  //     if (product.id === add.id) {
-  //       this.cartItemList.splice(index, 1);
-  //     }
-  //   })
-  //   this.productList.next(this.cartItemList);
-  // }
 
-  // removeAllCart() {
-  //   this.cartItemList = []
-  //   this.productList.next(this.cartItemList);
-  // }
+  removeCartItem(product: Cart) {
+    this.cartItemList.map((add: any, index: any) => {
+      if (product.id === add.id) {
+        this.cartItemList.splice(index, 1);
+      }
+    })
+    this.product.next(this.cartItemList);
+  }
+
+  removeAllCart() {
+    this.cartItemList = []
+    this.product.next(this.cartItemList);
+  }
 
   getCart(){
     return this.api.get<{ data: Cart }>('cart')
     .pipe(map((res) => res.data));
   }
-  updateProductCart(product: Product) {
+  updateProductCart(product: Product ) {
     console.log("Update Cart In The Service",product)
     return this.api.put<Cart>('update-cart', product);
   }
@@ -75,11 +67,12 @@ export class CartService {
     console.log("Delete Cart In The Service",product)
     return this.api. put<Cart>('delete-cart/' + product._id, product)
   }
+
+  removeCartItems(product: Product) {
+    return this.api.put<Cart>('remove-cart-item' ,product)
+  }
   
- 
 
-
- 
   selectCart(id: string) {
     this.selectedCartId = id;
   }

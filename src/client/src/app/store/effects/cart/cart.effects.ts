@@ -1,4 +1,4 @@
-import { deleteCart, deleteCartFailure, deleteCartSuccess, loadcart, loadcartFailure, loadcartSuccess, updateCart, updatecartFailure, updatecartSuccess } from './../../actions/cart/cart.actions';
+import { deleteCart, deleteCartFailure, deleteCartSuccess, loadcart, loadcartFailure, loadcartSuccess, removeFromCart, removeFromCartFailure, removeFromCartSuccess, updateCart, updatecartFailure, updatecartSuccess } from './../../actions/cart/cart.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CartService } from 'src/app/services/cart.service';
@@ -32,6 +32,18 @@ export class CartEffects {
         this.cartService.  updateProductCart(action.data).pipe(
           map((data) => updatecartSuccess({ data })),
           catchError((error) => of(updatecartFailure({ error })))
+        )
+      )
+    )
+  );
+
+  removeFromCart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(removeFromCart),
+      mergeMap((action) =>
+        this.cartService.removeCartItems(action.data).pipe(
+          map((data) => removeFromCartSuccess({ data })),
+          catchError((error) => of( removeFromCartFailure({ error })))
         )
       )
     )

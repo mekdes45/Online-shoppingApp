@@ -38,6 +38,21 @@ export const updatecartFailure = createAction(
   props<{ error: Error }>()
 );
 
+export const removeFromCart = createAction(
+  '[Cart] Remove Cart',
+  props<{data: Product}>()
+);
+
+export const removeFromCartSuccess = createAction(
+  '[Cart] Remove Cart Success',
+  props<{ data: Cart }>()
+);
+
+export const removeFromCartFailure = createAction(
+  '[Cart] Remove Cart Failure',
+  props<{ error: Error }>()
+);
+
 export const deleteCart = createAction(
   '[Cart] Delete Cart',
   props<{data: Product}>()
