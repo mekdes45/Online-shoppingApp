@@ -31,7 +31,7 @@
 }
 
 .card {
-  height: 60vh;
+  height: 65vh;
   padding: 25px;
   margin: 40px;
 }
@@ -51,5 +51,11 @@
   transform: translate(-50%,-50%);
   text-align: center;
 }
+.btn-primary{
+  background-color: #0d6efd;;
+}
 
-
+.btn{
+  background-color:#0d6efd;
+  margin-top: 3px;
+}
