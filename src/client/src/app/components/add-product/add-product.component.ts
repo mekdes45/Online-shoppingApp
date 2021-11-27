@@ -8,15 +8,13 @@ import { AppState } from 'src/app/store';
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.scss']
+  styleUrls: ['./add-product.component.scss'],
 })
 export class AddProductComponent implements OnInit {
   addProduct: FormGroup;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
     this.addProduct = this.fb.group({
-   
-      
       title: ['', Validators.required],
       price: [
         '',
@@ -32,20 +30,15 @@ export class AddProductComponent implements OnInit {
       ],
       quantity: [
         '',
-        Validators.compose([Validators.required,Validators.minLength(0)]),
+        Validators.compose([Validators.required, Validators.minLength(0)]),
       ],
-      
-     
-  
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   addProducts() {
-    this.store.dispatch(createProduct({ data: this.addProduct.value }))
+    this.store.dispatch(createProduct({ data: this.addProduct.value }));
     this.addProduct.reset();
     console.log('data');
-    
-}
+  }
 }
