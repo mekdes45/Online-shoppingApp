@@ -7,6 +7,7 @@ import { UserModel } from "./schemas/user.schema.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import stripe from 'stripe';
 
 import http from "http";
 import dotenv from "dotenv";
@@ -37,7 +38,7 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      "http://localhost:3002",
+      "http://localhost:3003",
       "http://localhost:4200",
       "http://localhost:3501",
       "http://localhost:8080",
@@ -196,7 +197,6 @@ app.get("/cart", authHandler, function (req: any, res) {
 app.put("/update-cart", authHandler, function (req: any, res) {
   CartModel.findOne(
     {user:req.user._id},
-  
   ).populate('items.product').then(cart => {
     console.log(cart, "Cart")
     if(cart) {
@@ -211,13 +211,8 @@ app.put("/update-cart", authHandler, function (req: any, res) {
      cart.save()
      .then(updatedCart => res.json(cart))
     }
-
   })
-   
 });
-
-
-
 app.put("/remove-cart-item",authHandler, function (req:any, res) {
   console.log("remove from cart Cart", req.user)
   CartModel.findOne(
@@ -262,6 +257,28 @@ app.put("/delete-cart/:id", authHandler, function (req: any, res) {
     }
   ).populate('items')
 });
+
+app.put("/empty-cart", authHandler, function (req: any, res) {
+  console.log("empty product from cart");
+  CartModel.findOneAndUpdate(
+    { user: req.user._id },
+    {
+      $set: { items: { product: [] } },
+    },
+    {
+      new: true,
+    },
+    function (err, emptyCart) {
+      if (err) {
+        res.send("Error rmpty product from cart");
+      }
+      else {
+        res.json(emptyCart);
+        console.log("empth product", emptyCart)
+      }
+    }
+  )
+});
 app.post("/login", function (req, res) {
   const { email, password } = req.body;
 
@@ -299,6 +316,26 @@ app.get("logout", function (req, res) {
 app.get("/check-login", authHandler, (req, res) => {
   res.json({ message: "yes" });
 });
+
+
+// app.post('/charge', function(req, res) {
+//   var stripeToken = req.body.stripeToken;
+//   var amount = 1000;
+
+//   stripe.charges.create({
+//       card: stripeToken,
+//       currency: 'usd',
+//       amount: amount
+//   },
+//   function(err, charge) {
+//       console.log(req.user);
+//       if (err) {
+//           res.send(500, err);
+//       } else {
+//           res.send(204);
+//       }
+//   });
+// });
 
 server.listen(PORT, function () {
   console.log(`starting at localhost http://localhost:${PORT}`);
