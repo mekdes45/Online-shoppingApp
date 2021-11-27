@@ -29,6 +29,8 @@ import * as fromCart from './store/reducers/cart/cart.reducer';
 import { CartEffects } from './store/effects/cart/cart.effects';
 import { FilterPipe } from './shared/filter.pipe';
 
+import { PaymentComponent } from './components/payment/payment.component';
+
 
 
 @NgModule({
@@ -46,6 +48,8 @@ import { FilterPipe } from './shared/filter.pipe';
   
     SignUpComponent,
        FilterPipe,
+     
+       PaymentComponent,
     
   ],
   imports: [

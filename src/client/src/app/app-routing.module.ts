@@ -8,6 +8,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { PageLoginComponent } from './pages/page-login/page-login.component';
 import { PageUsersComponent } from './pages/page-users/page-users.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/products', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'products', component: PrductsComponent },
   {path:'cart',component:CartComponent},
   { path: 'login', component: PageLoginComponent },
-  {path:'sign-up',component:SignUpComponent},
+  { path: 'sign-up', component: SignUpComponent },
+  {path:'checkout',component: PaymentComponent},
   {path:'**',component:PageNotFoundComponent},
   {path: 'users', component: PageUsersComponent,
    canActivate: [AuthGuard], resolve: []}
