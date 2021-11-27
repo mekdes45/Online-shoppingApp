@@ -1,0 +1,11 @@
+
+
+<div class="container">
+
+    <h2 class="mb-5"> Stripe Credit Card Payment </h2>
+  
+    <div class="col-md-4 mb-3" *ngIf="(cart$ | async) as cart">
+      <button (click)='[checkout(cart.total)]' class="btn btn-primary btn-block">Pay Now</button>
+    </div>
+   
+      </div>
