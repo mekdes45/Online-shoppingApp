@@ -10,7 +10,7 @@ const productSchema = new Schema<Product>({
     description: { type: String, required: true },
     imageurl: { type: String, required: true },
     quantity: {type: Number, required: true},
-    category:{type: String, required: true}
+   
   
   
     

@@ -66,36 +66,8 @@ export class PrductsComponent implements OnInit {
         }
       })
   }
-  //  inc(item: any) {
-  //   console.log(item.quantity);
+  
     
-  //   if (item.quantity != 5) {
-  //     item.quantity += 1;
-    
-  //   }
-    
-  // }
-  // dec(item: any) {
-  //   if (item.quantity != 5) {
-  //     item.quantity -= 1;
-  //   }
-  // }
-  // inc(qty: number) {
-  //   console.log("selected quantity",qty);
-  //   console.log("quantity avaiable",this.product );
-    
-  //   if (qty != this.product.quantity) {
-  //     qty += 1;
-  //     console.log(qty);
-  //   }
-  //   return qty;
-    
-  // }
-  // dec(qty: number) {
-  //   console.log("selected quantity",qty);
-  //   console.log("quantity avaiable",this.product.quantity );
-  //   if (qty != this.product.quantity) {
-  //     qty -= 1;
-  //   }
+  
+  
   }
-// }

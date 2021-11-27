@@ -8,7 +8,7 @@ export interface Product {
     description: string,
     imageurl: string,
     quantity?: number,
-    category:string,
+    
    
    
 }
