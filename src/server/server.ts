@@ -279,7 +279,7 @@ app.put("/api/empty-cart", authHandler, function (req: any, res) {
     }
   )
 });
-app.post("/api/login", function (req, res) {
+app.post("/login", function (req, res) {
   const { email, password } = req.body;
 console.log("Login Information", req.body)
   UserModel.findOne({ email })
