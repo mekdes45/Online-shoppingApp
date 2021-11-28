@@ -51,9 +51,9 @@ app.use(
 );
 app.use(express.json());
 
-app.get("/", function (req, res) {
-  res.json({ message: "test" });
-});
+// app.get("/", function (req, res) {
+//   res.json({ message: "test" });
+// });
 
 const clientPath = path.join(__dirname, "/dist/client");
 app.use(express.static(clientPath));
