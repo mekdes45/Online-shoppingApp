@@ -14,11 +14,14 @@ import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
 import { ProductModel } from "./schemas/product.schema.js";
 dotenv.config();
-const access_secret = process.env.ACCESS_TOKEN_SECRET as string;
+const access_secret =  process.env.ACCESS_TOKEN_SECRET as string;
 console.log(access_secret);
 const app = express();
 const server = http.createServer(app);
 import path from "path";
+
+
+console.log(process.env.MONGO_URL);
 
 const __dirname = path.resolve();
 
@@ -27,7 +30,8 @@ const saltRounds = 10;
 const PORT = 3002;
 
 mongoose
-  .connect("mongodb://localhost:27017/Online-Shopping")
+  .connect(`${process.env.MONGO_URL}`
+    )
   .then(() => {
     console.log("Connected to DB Successfully");
   })
@@ -281,20 +285,22 @@ app.put("/empty-cart", authHandler, function (req: any, res) {
 });
 app.post("/login", function (req, res) {
   const { email, password } = req.body;
-
+console.log("Login Information", req.body)
   UserModel.findOne({ email })
     .then((user) => {
-      console.log(user);
-
+        console.log("LOGIN USER",user);
+      
       bcrypt.compare(password, `${user?.password}`, function (err, result) {
         if (result) {
           console.log("It matches!");
-          const accessToken = jwt.sign({ user }, access_secret);
-          res.cookie("jwt", accessToken, {
-            httpOnly: true,
-            maxAge:60*60* 1000,
-          });
-          res.json({ data:user});
+          const accessToken = jwt.sign({user}, access_secret)
+          console.log("Token", accessToken)
+          res.cookie('jwt', accessToken, {
+              httpOnly: true,
+              maxAge: 60*60*1000,
+          })
+          // res.json({message: 'Successfully Logged In', user})
+          res.json({data:user})
         } else {
           res.sendStatus(403);
         }
