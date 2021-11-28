@@ -44,12 +44,7 @@ app.get("/", function (req, res) {
 });
 const clientPath = path.join(__dirname, "/dist/client");
 app.use(express.static(clientPath));
-app.get("/", function (req, res) {
-    const filePath = path.join(__dirname, "/dist/client/index.html");
-    console.log(filePath);
-    res.sendFile(filePath);
-});
-app.post("/create-product", function (req, res) {
+app.post("/api/create-product", function (req, res) {
     const { title, price, description, imageurl, quantity } = req.body;
     const product = new ProductModel({
         title,
@@ -69,7 +64,7 @@ app.post("/create-product", function (req, res) {
         res.json({ errors: err });
     });
 });
-app.get("/products", authHandler, function (req, res) {
+app.get("/api/products", authHandler, function (req, res) {
     ProductModel.find()
         .then((data) => res.json({
         data,
@@ -79,7 +74,7 @@ app.get("/products", authHandler, function (req, res) {
         res.json({ errors: err });
     });
 });
-app.get("/posts", function (req, res) {
+app.get("/api/posts", function (req, res) {
     PostModel.find()
         .then((data) => res.json({ data }))
         .catch((err) => {
@@ -87,7 +82,7 @@ app.get("/posts", function (req, res) {
         res.json({ errors: err });
     });
 });
-app.get("/users", authHandler, function (req, res) {
+app.get("/api/users", authHandler, function (req, res) {
     UserModel.find({ email: req.user.email }, "-password")
         .then((data) => res.json({ data }))
         .catch((err) => {
@@ -95,7 +90,7 @@ app.get("/users", authHandler, function (req, res) {
         res.json({ errors: err });
     });
 });
-app.post("/create-user", function (req, res) {
+app.post("/api/create-user", function (req, res) {
     const { name, email, username, password } = req.body;
     bcrypt.genSalt(saltRounds, function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
@@ -122,7 +117,7 @@ app.post("/create-user", function (req, res) {
         });
     });
 });
-app.post("/create-post", function (req, res) {
+app.post("/api/create-post", function (req, res) {
     const { title, body } = req.body;
     const post = new PostModel({
         title,
@@ -138,14 +133,14 @@ app.post("/create-post", function (req, res) {
         res.json({ errors: err });
     });
 });
-app.delete("/delete-user/:id", function (req, res) {
+app.delete("/api/delete-user/:id", function (req, res) {
     const _id = req.params.id;
     UserModel.findByIdAndDelete(_id).then((data) => {
         console.log(data);
         res.json({ data });
     });
 });
-app.put("/update-user/:id", function (req, res) {
+app.put("/api/update-user/:id", function (req, res) {
     console.log("Update user");
     UserModel.findByIdAndUpdate(req.params.id, {
         $set: { name: req.body.name, email: req.body.email },
@@ -160,7 +155,7 @@ app.put("/update-user/:id", function (req, res) {
         }
     });
 });
-app.get("/cart", authHandler, function (req, res) {
+app.get("/api/cart", authHandler, function (req, res) {
     CartModel.findOne({ user: req.user._id }).populate('user items.product')
         .then((data) => res.json({ data }))
         .catch((err) => {
@@ -168,7 +163,7 @@ app.get("/cart", authHandler, function (req, res) {
         res.json({ errors: err });
     });
 });
-app.put("/update-cart", authHandler, function (req, res) {
+app.put("/api/update-cart", authHandler, function (req, res) {
     CartModel.findOne({ user: req.user._id }).populate('items.product').then(cart => {
         console.log(cart, "Cart");
         if (cart) {
@@ -186,7 +181,7 @@ app.put("/update-cart", authHandler, function (req, res) {
         }
     });
 });
-app.put("/remove-cart-item", authHandler, function (req, res) {
+app.put("/api/remove-cart-item", authHandler, function (req, res) {
     console.log("remove from cart Cart", req.user);
     CartModel.findOne({ user: req.user._id }).then(cart => {
         if (cart) {
@@ -205,7 +200,7 @@ app.put("/remove-cart-item", authHandler, function (req, res) {
         }
     });
 });
-app.put("/delete-cart/:id", authHandler, function (req, res) {
+app.put("/api/delete-cart/:id", authHandler, function (req, res) {
     console.log('delete product from');
     CartModel.findOneAndUpdate({ user: req.user._id }, {
         $pull: { items: req.params.id },
@@ -220,7 +215,7 @@ app.put("/delete-cart/:id", authHandler, function (req, res) {
         }
     }).populate('items');
 });
-app.put("/empty-cart", authHandler, function (req, res) {
+app.put("/api/empty-cart", authHandler, function (req, res) {
     console.log("empty product from cart");
     CartModel.findOneAndUpdate({ user: req.user._id }, {
         $set: { items: { product: [] } },
@@ -236,7 +231,7 @@ app.put("/empty-cart", authHandler, function (req, res) {
         }
     });
 });
-app.post("/login", function (req, res) {
+app.post("/api/login", function (req, res) {
     const { email, password } = req.body;
     console.log("Login Information", req.body);
     UserModel.findOne({ email })
@@ -270,7 +265,7 @@ app.get("logout", function (req, res) {
     });
     res.json({ message: "Successfully Logged Out" });
 });
-app.get("/check-login", authHandler, (req, res) => {
+app.get("/api/check-login", authHandler, (req, res) => {
     res.json({ message: "yes" });
 });
 // app.post('/charge', function(req, res) {
@@ -292,6 +287,14 @@ app.get("/check-login", authHandler, (req, res) => {
 // });
 server.listen(PORT, function () {
     console.log(`starting at localhost http://localhost:${PORT}`);
+});
+app.all("/api/*", function (req, res) {
+    res.sendStatus(404);
+});
+app.get("*", function (req, res) {
+    const filePath = path.join(__dirname, "/dist/client/index.html");
+    console.log(filePath);
+    res.sendFile(filePath);
 });
 // io.on('connection', function(socket){
 //   console.log('a user connected');
