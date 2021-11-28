@@ -58,11 +58,7 @@ app.get("/", function (req, res) {
 const clientPath = path.join(__dirname, "/dist/client");
 app.use(express.static(clientPath));
 
-app.get("/", function (req, res) {
-  const filePath = path.join(__dirname, "/dist/client/index.html");
-  console.log(filePath);
-  res.sendFile(filePath);
-});
+
 
 app.post("/create-product", function (req, res) {
   const { title, price, description, imageurl, quantity } = req.body;
@@ -347,6 +343,14 @@ server.listen(PORT, function () {
   console.log(`starting at localhost http://localhost:${PORT}`);
 });
 
+app.all("/api/*", function (req, res) {
+  res.sendStatus(404);
+});
+app.get("*", function (req, res) {
+  const filePath = path.join(__dirname, "/dist/client/index.html");
+  console.log(filePath);
+  res.sendFile(filePath);
+});
 // io.on('connection', function(socket){
 //   console.log('a user connected');
 //   socket.emit('message', 'work')
