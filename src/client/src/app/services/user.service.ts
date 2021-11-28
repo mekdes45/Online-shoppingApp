@@ -24,7 +24,7 @@ export class UserService {
 
 
   login(user: Partial<User>) {
-    return this.api .post<{ data: User }>('login', user).pipe(map((res) => res.data));
+    return this.api.post<{ data: User }>('login', user).pipe(map((res) => res.data));
   }
   updateUser(user: User) {
     return this.api.put<User>('update-user/' + user._id, user);
