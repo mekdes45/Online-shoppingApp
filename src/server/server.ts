@@ -27,7 +27,7 @@ const __dirname = path.resolve();
 
 const saltRounds = 10;
 
-const PORT = 3002;
+const PORT = process.env.PORT || 3000;
 
 mongoose
   .connect(`${process.env.MONGO_URL}`
@@ -42,7 +42,7 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      "http://localhost:3003",
+      "http://localhost:3000",
       "http://localhost:4200",
       "http://localhost:3501",
       "http://localhost:8080",
