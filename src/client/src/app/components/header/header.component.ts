@@ -1,3 +1,4 @@
+import { logoutUser } from './../../store/actions/user/user.actions';
 import { cartSelector } from './../../store/selectors/cart/cart.selectors';
 import { AppState } from './../../store/index';
 import { Observable } from 'rxjs';
@@ -32,6 +33,9 @@ export class HeaderComponent implements OnInit {
     this.searchTerm = (event.target as HTMLInputElement).value;
     console.log(this.searchTerm);
     this.cartService.search.next(this.searchTerm);
+  }
+    Logout() {
+    this.store.dispatch(logoutUser())
   }
 }
 
