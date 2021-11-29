@@ -11,16 +11,18 @@ import { PageUsersComponent } from './pages/page-users/page-users.component';
 import { PaymentComponent } from './components/payment/payment.component';
 
 const routes: Routes = [
-  { path: '**', redirectTo: 'products'},
+ 
  
   {path:'add-product',component: AddProductComponent},
-  { path: '/', component: PrductsComponent },
+ 
   {path:'cart',component:CartComponent},
   { path: 'login', component: PageLoginComponent },
   { path: 'sign-up', component: SignUpComponent },
   {path:'checkout',component: PaymentComponent},
-  {path:'Page-not-found',component:PageNotFoundComponent},
-  {path: 'users', component: PageUsersComponent,
+  { path: 'Page-not-found', component: PageNotFoundComponent },
+  { path: '', component: PrductsComponent },
+  {
+    path: 'users', component: PageUsersComponent,
    canActivate: [AuthGuard], resolve: []}
 ];
 
