@@ -31,6 +31,7 @@ import { FilterPipe } from './shared/filter.pipe';
 
 import { PaymentComponent } from './components/payment/payment.component';
 import { HomeComponent } from './components/home/home.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 
 
@@ -52,6 +53,7 @@ import { HomeComponent } from './components/home/home.component';
      
        PaymentComponent,
              HomeComponent,
+             LogoutComponent,
     
   ],
   imports: [

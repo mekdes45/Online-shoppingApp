@@ -9,6 +9,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { PageLoginComponent } from './pages/page-login/page-login.component';
 import { PageUsersComponent } from './pages/page-users/page-users.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 const routes: Routes = [
  
@@ -17,6 +18,7 @@ const routes: Routes = [
  
   {path:'cart',component:CartComponent},
   { path: 'login', component: PageLoginComponent },
+  { path: 'logout', component: LogoutComponent },
   { path: 'sign-up', component: SignUpComponent },
   {path:'checkout',component: PaymentComponent},
   { path: 'Page-not-found', component: PageNotFoundComponent },
