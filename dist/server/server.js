@@ -258,7 +258,7 @@ app.post("/api/login", function (req, res) {
         return res.sendStatus(404);
     });
 });
-app.get("logout", function (req, res) {
+app.get("/api/logout", function (req, res) {
     res.cookie("jwt", "", {
         httpOnly: true,
         maxAge: 0,

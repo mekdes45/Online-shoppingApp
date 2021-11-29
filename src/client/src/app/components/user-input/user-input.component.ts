@@ -1,3 +1,4 @@
+import { logoutUser } from './../../store/actions/user/user.actions';
 import { Router } from '@angular/router';
 import {
   Component,
@@ -67,7 +68,8 @@ export class UserInputComponent implements OnInit, OnChanges {
   login() {
     this.store.dispatch(loginUser({ data: this.addUser.value }))
   }
- 
+
+
     
   
 
