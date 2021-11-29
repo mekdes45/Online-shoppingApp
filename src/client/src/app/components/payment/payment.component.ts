@@ -1,3 +1,4 @@
+import { emptyCart } from './../../store/actions/cart/cart.actions';
 import { Router } from '@angular/router';
 import { usersSelector } from './../../store/selectors/user/user.selectors';
 import { Store } from '@ngrx/store';
@@ -28,13 +29,15 @@ export class PaymentComponent implements OnInit {
     this.stripePaymentGateway();
   }
   
-  checkout(amount:number | undefined) {
+  checkout(amount:number | undefined, cart:Cart) {
     const strikeCheckout = (<any>window).StripeCheckout.configure({
       key: 'pk_test_51Iw7ulF5GTmwNEHFICts8Ga8WXUhKKDeWmYseGABJ2Acf2A23r4SaEf690tZEBNTSMevFbtP7pxSSQxklEIs3haI00JkoFuj6b',
       locale: 'auto',
-      token: function (stripeToken: any) {
+      token:  (stripeToken: any)=> {
         console.log(stripeToken)
         alert('Stripe token sucessfully!');
+        this.emptyCart(cart)
+
       }
     });
   
@@ -67,5 +70,8 @@ export class PaymentComponent implements OnInit {
     }
   }
   
+  emptyCart(cart:Cart) {
+    this.store.dispatch(emptyCart({ data: cart }))
+  }
 
 }
