@@ -307,7 +307,7 @@ console.log("Login Information", req.body)
     });
 });
 
-app.get("logout", function (req, res) {
+app.get("/api/logout", function (req, res) {
   res.cookie("jwt", "", {
     httpOnly: true,
     maxAge: 0,
