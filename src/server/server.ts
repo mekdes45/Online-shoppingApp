@@ -258,7 +258,7 @@ app.put("/api/delete-cart/:id", authHandler, function (req: any, res) {
   ).populate('items')
 });
 
-app.put("/api/empty-cart", authHandler, function (req: any, res) {
+app.put("/api/empty-cart/:id", authHandler, function (req:any,res) {
   console.log("empty product from cart");
   CartModel.findOneAndUpdate(
     { user: req.user._id },
@@ -270,7 +270,7 @@ app.put("/api/empty-cart", authHandler, function (req: any, res) {
     },
     function (err, emptyCart) {
       if (err) {
-        res.send("Error rmpty product from cart");
+        res.send("Error empty product from cart");
       }
       else {
         res.json(emptyCart);

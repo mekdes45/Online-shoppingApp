@@ -71,8 +71,8 @@ export class CartService {
   removeCartItems(product: Product) {
     return this.api.put<Cart>('remove-cart-item' ,product)
   }
-  emptyCart(product: Product) {
-    return this.api.put<Cart>('empty-cart' ,product)
+  emptyCart(cart: Cart) {
+    return this.api.put<Cart>('empty-cart/' + cart.id,cart)
   }
   
 
