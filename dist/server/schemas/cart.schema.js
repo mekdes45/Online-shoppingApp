@@ -14,8 +14,8 @@ cartSchema.virtual("count").get(function () {
 });
 cartSchema.virtual('total').get(function () {
     return this.items.reduce((amount, item) => {
-        return (item.product.price * item.quantity) + amount;
-    }, 0);
+        return ((item.product.price * item.quantity)) + amount;
+    }, 0).toFixed(2);
 });
 cartSchema.set(`toObject`, { virtuals: true });
 cartSchema.set(`toJSON`, { virtuals: true });

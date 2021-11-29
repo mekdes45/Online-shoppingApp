@@ -47,9 +47,9 @@ export class UserInputComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.selectedUser?.currentValue) {
       const user = changes?.selectedUser?.currentValue;
-      // this.addUser.get('name')?.setValue(user.name);
+     
       this.addUser.get('email')?.setValue(user.email);
-      // this.addUser.get('username')?.setValue(user.username);
+   
       this.addUser.updateValueAndValidity();
     }
   }
@@ -67,4 +67,8 @@ export class UserInputComponent implements OnInit, OnChanges {
   login() {
     this.store.dispatch(loginUser({ data: this.addUser.value }))
   }
+ 
+    
+  
+
 }

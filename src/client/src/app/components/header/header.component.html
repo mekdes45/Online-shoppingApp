@@ -18,12 +18,15 @@
     <div>
       <a class="btn btn-outline-primary" [routerLink]="['/sign-up']">Sign-up</a>
       <a class="btn btn-outline-primary" [routerLink]="['/login']">login</a>
+      <a class="btn btn-outline-primary" [routerLink]="['/logout']">logout</a>
       <a class="btn btn-outline-primary" [routerLink]="['/add-product']"
         >Add-Products</a
       >
       <a class="btn btn-outline-primary" [routerLink]="['/']"
         >Products</a
       >
+    
+    
     </div>
     <ng-container *ngIf="cart$ | async as cart">
       <ng-container *ngIf="cart.items as items">
