@@ -30,6 +30,7 @@ import { CartEffects } from './store/effects/cart/cart.effects';
 import { FilterPipe } from './shared/filter.pipe';
 
 import { PaymentComponent } from './components/payment/payment.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 
@@ -50,6 +51,7 @@ import { PaymentComponent } from './components/payment/payment.component';
        FilterPipe,
      
        PaymentComponent,
+             HomeComponent,
     
   ],
   imports: [

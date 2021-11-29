@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: '**', redirectTo: 'products'},
  
   {path:'add-product',component: AddProductComponent},
-  { path: 'products', component: PrductsComponent },
+  { path: '/', component: PrductsComponent },
   {path:'cart',component:CartComponent},
   { path: 'login', component: PageLoginComponent },
   { path: 'sign-up', component: SignUpComponent },
