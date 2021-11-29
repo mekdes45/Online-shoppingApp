@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { map } from 'rxjs/operators';
@@ -11,11 +12,15 @@ export class UserService {
 
   selectedUserId = '';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private router:Router) { }
 
 
   getUsers() {
     return this.api.get<{ data: User[] }>('users').pipe(map((res) => res.data));
+  }
+  Logout() {
+    this.router.navigate(['/login'])
+    return this.api.get('logout');
   }
  
   createUser(user: User) {
@@ -26,6 +31,8 @@ export class UserService {
   login(user: Partial<User>) {
     return this.api.post<{ data: User }>('login', user).pipe(map((res) => res.data));
   }
+
+
   updateUser(user: User) {
     return this.api.put<User>('update-user/' + user._id, user);
   }

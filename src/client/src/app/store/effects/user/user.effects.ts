@@ -19,6 +19,9 @@ import {
   loginUser,
   loginUserFailure,
   loginUserSuccess,
+  logoutUser,
+  logoutUserFailure,
+  logoutUserSuccess,
   updateUser,
   updateUserFailure,
   updateUserSuccess,
@@ -86,29 +89,18 @@ export class UserEffects {
   )
   );
   
-//   loadProducts$ = createEffect(() =>
-//   this.actions$.pipe(
-//     ofType(loadProducts),
-//     mergeMap(() =>
-//       this.productService.getProducts().pipe(
-//         map((data) => loadProductsSuccess({ data })),
-//         catchError((error) => of(loadProductsFailure({ error })))
-//       )
-//     )
-//   )
-//   );
+  logoutUsers$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(logoutUser),
+    mergeMap(() =>
+      this.userService.Logout().pipe(
+        map(() => logoutUserSuccess()),
+        catchError((error) => of(logoutUserFailure({ error })))
+      )
+    )
+  )
+  );
   
-//   createProduct$ = createEffect(() =>
-//   this.actions$.pipe(
-//     ofType(createProduct),
-//     mergeMap((action) =>
-//       this.productService.createProduct(action.data).pipe(
-//         map((data) => createProductSuccess({ data })),
-//         catchError((error) => of(createProductFailure({ error })))
-//       )
-//     )
-//   )
-// );
 
 
   constructor(private actions$: Actions, private userService: UserService ) {}
