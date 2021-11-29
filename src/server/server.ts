@@ -81,7 +81,7 @@ app.post("/api/create-product", function (req, res) {
       res.json({ errors: err });
     });
 });
-app.get("/api/products", authHandler, function (req, res) {
+app.get("/api/products", function (req, res) {
   ProductModel.find()
     .then((data) =>
       res.json({
