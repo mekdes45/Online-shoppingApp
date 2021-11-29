@@ -20,8 +20,8 @@ cartSchema.virtual("count").get(function (this: Cart) {
   
 cartSchema.virtual('total').get(function (this: Cart) {
     return this.items.reduce((amount: number, item:{product:Product,quantity:number}) => {
-        return (item.product.price*item.quantity) + amount
-    },0)
+        return ((item.product.price*item.quantity)) + amount
+    },0).toFixed(2)
 })
 cartSchema.set(`toObject`, {virtuals:true});
 cartSchema.set(`toJSON`, {virtuals:true});
