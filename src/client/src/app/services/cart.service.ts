@@ -43,7 +43,7 @@ export class CartService {
 
   removeCartItem(product: Cart) {
     this.cartItemList.map((add: any, index: any) => {
-      if (product.id === add.id) {
+      if (product._id === add.id) {
         this.cartItemList.splice(index, 1);
       }
     })
@@ -72,7 +72,7 @@ export class CartService {
     return this.api.put<Cart>('remove-cart-item' ,product)
   }
   emptyCart(cart: Cart) {
-    return this.api.put<Cart>('empty-cart/' + cart.id,cart)
+    return this.api.put<Cart>('empty-cart/' + cart._id, cart)
   }
   
 

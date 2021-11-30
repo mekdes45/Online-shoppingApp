@@ -63,7 +63,7 @@
               />
               <h4>Your cart is empty!</h4>
               <h6>Add item to it now</h6>
-              <button routerLink="/products" class="btn btn-primary">
+              <button routerLink="/" class="btn btn-primary">
                 Shop Now
               </button>
             </div>
@@ -71,9 +71,10 @@
         </div>
 
         SubTotal:<button (click)="checkout()">checkout</button><br />
+        {{ cart.total
+        }}
       </div>
-      {{ cart.total
-      }}
+     
     </ng-container>
   </div>
 </div>

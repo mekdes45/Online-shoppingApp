@@ -263,7 +263,7 @@ app.put("/api/empty-cart/:id", authHandler, function (req:any,res) {
   CartModel.findOneAndUpdate(
     { user: req.user._id },
     {
-      $set: { items: { product: [] } },
+      $set: { items: [] },
     },
     {
       new: true,

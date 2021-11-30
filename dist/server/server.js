@@ -218,7 +218,7 @@ app.put("/api/delete-cart/:id", authHandler, function (req, res) {
 app.put("/api/empty-cart/:id", authHandler, function (req, res) {
     console.log("empty product from cart");
     CartModel.findOneAndUpdate({ user: req.user._id }, {
-        $set: { items: { product: [] } },
+        $set: { items: [] },
     }, {
         new: true,
     }, function (err, emptyCart) {

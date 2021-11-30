@@ -1,8 +1,8 @@
 <header>
   <div class="navbar bg-primary shadow-small-sm">
     <div class="navbar-brand align-item-center d-flex">
-      <i style="font-size: 40px" class="fas fa-shipping-fast">&nbsp; </i>
-      <strong style="font-size: 30px">Mekdi-Shop</strong>
+      <!-- <i style="font-size: 40px" class="fas fa-shipping-fast">&nbsp; </i> -->
+      <strong style="font-size: 25px">Mekdi-Shop</strong>
       <div class="form-group">
         <input
           type="text"
@@ -27,16 +27,19 @@
     
     
     </div>
-    <ng-container *ngIf="cart$ | async as cart">
-      <ng-container *ngIf="cart.items as items">
-        <button routerLink="cart" class="byt-primary">
+    <span routerLink="/cart" class="byt-primary">
+    <div *ngIf="cart$ | async as cart">
+      <!-- <ng-container *ngIf="cart.items as items"> -->
+        {{
+          cart.count
+        }}
+
+      </div>
           <i style="font-size: 30px" class="fas fa-cart-plus"></i>
-          <span style="font-size: 10px" class="badge bg-danger">{{
-            cart.count
-          }}</span>
-        </button>
-      </ng-container>
-    </ng-container>
+          <span style="font-size: 10px" class="badge bg-danger"></span>
+         
+    </span>
+    <!-- </ng-container> -->
     <button (click)="Logout()">logout</button>
   </div>
 </header>

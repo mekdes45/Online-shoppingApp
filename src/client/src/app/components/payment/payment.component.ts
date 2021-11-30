@@ -72,6 +72,8 @@ export class PaymentComponent implements OnInit {
   
   emptyCart(cart:Cart) {
     this.store.dispatch(emptyCart({ data: cart }))
+    this.router.navigate(["/"])
   }
 
+ 
 }

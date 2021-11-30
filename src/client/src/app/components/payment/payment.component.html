@@ -6,9 +6,7 @@
   
     <div class="col-md-4 mb-3" *ngIf="(cart$ | async) as cart">
       <button (click)='[checkout(cart.total,cart)]' class="btn btn-primary btn-block">Pay Now</button>
-      <button (click)="emptyCart(cart)">
-        pay
-      </button>
+     
     </div>
    
       </div>
