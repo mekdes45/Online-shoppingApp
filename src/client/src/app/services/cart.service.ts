@@ -74,6 +74,11 @@ export class CartService {
   emptyCart(cart: Cart) {
     return this.api.put<Cart>('empty-cart/' + cart._id, cart)
   }
+  payment(amount: number, id: string) {
+    console.log('payment',amount,id);
+    
+    return this.api.post('payment',{amount,id})
+  }
   
 
   selectCart(id: string) {

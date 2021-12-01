@@ -1,3 +1,4 @@
+import { CartService } from 'src/app/services/cart.service';
 import { emptyCart } from './../../store/actions/cart/cart.actions';
 import { Router } from '@angular/router';
 import { usersSelector } from './../../store/selectors/user/user.selectors';
@@ -18,8 +19,9 @@ export class PaymentComponent implements OnInit {
   cart$: Observable<Cart | null>
   user$:Observable<User[]>
   strikeCheckout:any = null;
+  api: any;
 
-  constructor(private store: Store<AppState>,private router:Router) {
+  constructor(private store: Store<AppState>,private router:Router,private cartService:CartService) {
     this.cart$ = this.store.select(cartSelector);
     this.user$=this.store.select(usersSelector)
     
@@ -36,14 +38,17 @@ export class PaymentComponent implements OnInit {
       token:  (stripeToken: any)=> {
         console.log(stripeToken)
         alert('Stripe token sucessfully!');
-        this.emptyCart(cart)
+        this.cartService.payment(amount!*100,stripeToken.id).subscribe(()=>{
+          this.emptyCart(cart)
+        })
+    
 
       }
     });
   
     strikeCheckout.open({
-      name: 'local',
-      description: 'Payment',
+      name: 'RemoteStack',
+      description: 'Payment widgets',
       amount: amount! * 100
     });
   }
@@ -74,6 +79,5 @@ export class PaymentComponent implements OnInit {
     this.store.dispatch(emptyCart({ data: cart }))
     this.router.navigate(["/"])
   }
-
  
 }
