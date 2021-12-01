@@ -7,19 +7,24 @@ import { UserModel } from "./schemas/user.schema.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-import stripe from 'stripe';
 
 import http from "http";
 import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
 import { ProductModel } from "./schemas/product.schema.js";
+import Stripe from "stripe";
+// @ts-ignore
+const stripe = new Stripe(
+  "sk_test_51Iw7ulF5GTmwNEHFjuvsjbs4t1HqWnzks9ZySNOydSYLckGDOAp0SVhga4crz4YB4mkcjeCOX22ICD6EybEvm24M00BB1SAv6T",
+  { apiVersion: "2020-08-27" }
+);
+
 dotenv.config();
-const access_secret =  process.env.ACCESS_TOKEN_SECRET as string;
+const access_secret = process.env.ACCESS_TOKEN_SECRET as string;
 console.log(access_secret);
 const app = express();
 const server = http.createServer(app);
 import path from "path";
-
 
 console.log(process.env.MONGO_URL);
 
@@ -30,8 +35,7 @@ const saltRounds = 10;
 const PORT = process.env.PORT || 3000;
 
 mongoose
-  .connect(`${process.env.MONGO_URL}`
-    )
+  .connect(`${process.env.MONGO_URL}`)
   .then(() => {
     console.log("Connected to DB Successfully");
   })
@@ -58,8 +62,6 @@ app.use(express.json());
 const clientPath = path.join(__dirname, "/dist/client");
 app.use(express.static(clientPath));
 
-
-
 app.post("/api/create-product", function (req, res) {
   const { title, price, description, imageurl, quantity } = req.body;
   const product = new ProductModel({
@@ -68,7 +70,6 @@ app.post("/api/create-product", function (req, res) {
     description,
     imageurl,
     quantity,
-    
   });
   product
     .save()
@@ -103,7 +104,7 @@ app.get("/api/posts", function (req, res) {
     });
 });
 app.get("/api/users", authHandler, function (req: any, res) {
-  UserModel.find({email:req.user.email}, "-password")
+  UserModel.find({ email: req.user.email }, "-password")
     .then((data) => res.json({ data }))
     .catch((err) => {
       res.status(501);
@@ -124,11 +125,12 @@ app.post("/api/create-user", function (req, res) {
         .save()
         .then((data) => {
           res.json({ data });
-        }).then(()=>{
+        })
+        .then(() => {
           const cart = new CartModel({
             user: user._id,
-          })
-          cart.save()
+          });
+          cart.save();
         })
         .catch((err) => {
           res.status(501);
@@ -184,9 +186,8 @@ app.put("/api/update-user/:id", function (req, res) {
 });
 
 app.get("/api/cart", authHandler, function (req: any, res) {
-  CartModel.findOne(
-    {user:req.user._id}
-  ).populate('user items.product')
+  CartModel.findOne({ user: req.user._id })
+    .populate("user items.product")
     .then((data) => res.json({ data }))
     .catch((err) => {
       res.status(501);
@@ -195,55 +196,75 @@ app.get("/api/cart", authHandler, function (req: any, res) {
 });
 
 app.put("/api/update-cart", authHandler, function (req: any, res) {
-  CartModel.findOne(
-    {user:req.user._id},
-  ).populate('items.product').then(cart => {
-    console.log(cart, "Cart")
-    if(cart) {
-      console.log(req.body, req.body._id, cart.items[0])
-      const item = cart.items.find(item => item.product._id == req.body._id)
-      console.log(item, "item")
-     if(item) {
-       item.quantity++
-     } else {
-       cart.items.push({product:req.body._id, quantity:1})
-     }
-     cart.save()
-     .then(updatedCart => res.json(cart))
-    }
-  })
+  CartModel.findOne({ user: req.user._id })
+    .populate("items.product")
+    .then((cart) => {
+      console.log(cart, "Cart");
+      if (cart) {
+        console.log(req.body, req.body._id, cart.items[0]);
+        const item = cart.items.find(
+          (item) => item.product._id == req.body._id
+        );
+        console.log(item, "item");
+        if (item) {
+          item.quantity++;
+        } else {
+          cart.items.push({ product: req.body._id, quantity: 1 });
+        }
+        cart.save().then((updatedCart) => res.json(cart));
+      }
+    });
 });
-app.put("/api/remove-cart-item",authHandler, function (req:any, res) {
-  console.log("remove from cart Cart", req.user)
-  CartModel.findOne(
-    {user:req.user._id},
-  
-  ).then(cart => {
-    if(cart) {
-      const item = cart.items.find(item => item.product == req.body._id)
-     if(item) {
-       item.quantity--;
-       if(item.quantity <1){
-         cart.items.splice(cart.items.findIndex(ii => ii == item ),1)
-       }
-     }
-   cart?.save().then((updatedCart)=> {
-  CartModel.populate(updatedCart, "items.product").then((populatedCart)=> {
-    res.json(populatedCart)
-   })
- })  
+app.put("/api/remove-cart-item", authHandler, function (req: any, res) {
+  console.log("remove from cart Cart", req.user);
+  CartModel.findOne({ user: req.user._id }).then((cart) => {
+    if (cart) {
+      const item = cart.items.find((item) => item.product == req.body._id);
+      if (item) {
+        item.quantity--;
+        if (item.quantity < 1) {
+          cart.items.splice(
+            cart.items.findIndex((ii) => ii == item),
+            1
+          );
+        }
+      }
+      cart?.save().then((updatedCart) => {
+        CartModel.populate(updatedCart, "items.product").then(
+          (populatedCart) => {
+            res.json(populatedCart);
+          }
+        );
+      });
     }
-  })
+  });
 });
 
+app.post("/api/payment", (req, res, next) => {
+  stripe.charges
+    .create({
+      amount: req.body.amount,
+      currency: "USD",
+      description: "One-time setup fee",
+      source: req.body.id,
+    })
+    .then((charges) => {
+      res.json({ charges });
+    })
+    .catch((error
+    ) => {
+      console.log(error);
+      res.sendStatus(501);
+    });
+  console.log(req.body);
+});
 
 app.put("/api/delete-cart/:id", authHandler, function (req: any, res) {
-  console.log('delete product from');
-  
+  console.log("delete product from");
   CartModel.findOneAndUpdate(
-    {user:req.user._id},
+    { user: req.user._id },
     {
-      $pull: { items:req.params.id },
+      $pull: { items: req.params.id },
     },
     {
       new: true,
@@ -255,10 +276,10 @@ app.put("/api/delete-cart/:id", authHandler, function (req: any, res) {
         res.json(deleteItemFromCart);
       }
     }
-  ).populate('items')
+  ).populate("items");
 });
 
-app.put("/api/empty-cart/:id", authHandler, function (req:any,res) {
+app.put("/api/empty-cart/:id", authHandler, function (req: any, res) {
   console.log("empty product from cart");
   CartModel.findOneAndUpdate(
     { user: req.user._id },
@@ -271,32 +292,31 @@ app.put("/api/empty-cart/:id", authHandler, function (req:any,res) {
     function (err, emptyCart) {
       if (err) {
         res.send("Error empty product from cart");
-      }
-      else {
+      } else {
         res.json(emptyCart);
-        console.log("empth product", emptyCart)
+        console.log("empth product", emptyCart);
       }
     }
-  )
+  );
 });
 app.post("/api/login", function (req, res) {
   const { email, password } = req.body;
-console.log("Login Information", req.body)
+  console.log("Login Information", req.body);
   UserModel.findOne({ email })
     .then((user) => {
-        console.log("LOGIN USER",user);
-      
+      console.log("LOGIN USER", user);
+
       bcrypt.compare(password, `${user?.password}`, function (err, result) {
         if (result) {
           console.log("It matches!");
-          const accessToken = jwt.sign({user}, access_secret)
-          console.log("Token", accessToken)
-          res.cookie('jwt', accessToken, {
-              httpOnly: true,
-              maxAge: 60*60*1000,
-          })
+          const accessToken = jwt.sign({ user }, access_secret);
+          console.log("Token", accessToken);
+          res.cookie("jwt", accessToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+          });
           // res.json({message: 'Successfully Logged In', user})
-          res.json({data:user})
+          res.json({ data: user });
         } else {
           res.sendStatus(403);
         }
@@ -318,7 +338,6 @@ app.get("/api/logout", function (req, res) {
 app.get("/api/check-login", authHandler, (req, res) => {
   res.json({ message: "yes" });
 });
-
 
 // app.post('/charge', function(req, res) {
 //   var stripeToken = req.body.stripeToken;
