@@ -7,11 +7,13 @@ import { UserModel } from "./schemas/user.schema.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-import 'stripe';
 import http from "http";
 import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
 import { ProductModel } from "./schemas/product.schema.js";
+import Stripe from "stripe";
+// @ts-ignore
+const stripe = new Stripe("sk_test_51Iw7ulF5GTmwNEHFjuvsjbs4t1HqWnzks9ZySNOydSYLckGDOAp0SVhga4crz4YB4mkcjeCOX22ICD6EybEvm24M00BB1SAv6T", { apiVersion: "2020-08-27" });
 dotenv.config();
 const access_secret = process.env.ACCESS_TOKEN_SECRET;
 console.log(access_secret);
@@ -104,7 +106,8 @@ app.post("/api/create-user", function (req, res) {
                 .save()
                 .then((data) => {
                 res.json({ data });
-            }).then(() => {
+            })
+                .then(() => {
                 const cart = new CartModel({
                     user: user._id,
                 });
@@ -156,7 +159,8 @@ app.put("/api/update-user/:id", function (req, res) {
     });
 });
 app.get("/api/cart", authHandler, function (req, res) {
-    CartModel.findOne({ user: req.user._id }).populate('user items.product')
+    CartModel.findOne({ user: req.user._id })
+        .populate("user items.product")
         .then((data) => res.json({ data }))
         .catch((err) => {
         res.status(501);
@@ -164,11 +168,13 @@ app.get("/api/cart", authHandler, function (req, res) {
     });
 });
 app.put("/api/update-cart", authHandler, function (req, res) {
-    CartModel.findOne({ user: req.user._id }).populate('items.product').then(cart => {
+    CartModel.findOne({ user: req.user._id })
+        .populate("items.product")
+        .then((cart) => {
         console.log(cart, "Cart");
         if (cart) {
             console.log(req.body, req.body._id, cart.items[0]);
-            const item = cart.items.find(item => item.product._id == req.body._id);
+            const item = cart.items.find((item) => item.product._id == req.body._id);
             console.log(item, "item");
             if (item) {
                 item.quantity++;
@@ -176,20 +182,19 @@ app.put("/api/update-cart", authHandler, function (req, res) {
             else {
                 cart.items.push({ product: req.body._id, quantity: 1 });
             }
-            cart.save()
-                .then(updatedCart => res.json(cart));
+            cart.save().then((updatedCart) => res.json(cart));
         }
     });
 });
 app.put("/api/remove-cart-item", authHandler, function (req, res) {
     console.log("remove from cart Cart", req.user);
-    CartModel.findOne({ user: req.user._id }).then(cart => {
+    CartModel.findOne({ user: req.user._id }).then((cart) => {
         if (cart) {
-            const item = cart.items.find(item => item.product == req.body._id);
+            const item = cart.items.find((item) => item.product == req.body._id);
             if (item) {
                 item.quantity--;
                 if (item.quantity < 1) {
-                    cart.items.splice(cart.items.findIndex(ii => ii == item), 1);
+                    cart.items.splice(cart.items.findIndex((ii) => ii == item), 1);
                 }
             }
             cart?.save().then((updatedCart) => {
@@ -200,8 +205,25 @@ app.put("/api/remove-cart-item", authHandler, function (req, res) {
         }
     });
 });
+app.post("/api/payment", (req, res, next) => {
+    stripe.charges
+        .create({
+        amount: req.body.amount,
+        currency: "USD",
+        description: "One-time setup fee",
+        source: req.body.id,
+    })
+        .then((charges) => {
+        res.json({ charges });
+    })
+        .catch((error) => {
+        console.log(error);
+        res.sendStatus(501);
+    });
+    console.log(req.body);
+});
 app.put("/api/delete-cart/:id", authHandler, function (req, res) {
-    console.log('delete product from');
+    console.log("delete product from");
     CartModel.findOneAndUpdate({ user: req.user._id }, {
         $pull: { items: req.params.id },
     }, {
@@ -213,7 +235,7 @@ app.put("/api/delete-cart/:id", authHandler, function (req, res) {
         else {
             res.json(deleteItemFromCart);
         }
-    }).populate('items');
+    }).populate("items");
 });
 app.put("/api/empty-cart/:id", authHandler, function (req, res) {
     console.log("empty product from cart");
@@ -242,7 +264,7 @@ app.post("/api/login", function (req, res) {
                 console.log("It matches!");
                 const accessToken = jwt.sign({ user }, access_secret);
                 console.log("Token", accessToken);
-                res.cookie('jwt', accessToken, {
+                res.cookie("jwt", accessToken, {
                     httpOnly: true,
                     maxAge: 60 * 60 * 1000,
                 });

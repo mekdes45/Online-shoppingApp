@@ -30,8 +30,7 @@ import { CartEffects } from './store/effects/cart/cart.effects';
 import { FilterPipe } from './shared/filter.pipe';
 
 import { PaymentComponent } from './components/payment/payment.component';
-
-
+// import { NgxStripeModule } from 'ngx-stripe';
 
 
 
@@ -68,6 +67,9 @@ import { PaymentComponent } from './components/payment/payment.component';
     EffectsModule.forRoot([UserEffects, ProductEffects, CartEffects]),
     StoreModule.forFeature(fromProduct.productFeatureKey, fromProduct.reducer),
     StoreModule.forFeature(fromCart.cartFeatureKey, fromCart.reducer),
+    // NgxStripeModule.forRoot('pk_test_51Iw7ulF5GTmwNEHFICts8Ga8WXUhKKDeWmYseGABJ2Acf2A23r4SaEf690tZEBNTSMevFbtP7pxSSQxklEIs3haI00JkoFuj6b'),
+
+   
    
   ],
   providers: [],
