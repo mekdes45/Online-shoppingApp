@@ -76,7 +76,6 @@ export class CartService {
   }
   payment(amount: number, id: string) {
     console.log('payment',amount,id);
-    
     return this.api.post('payment',{amount,id})
   }
   

@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment.prod';
 import { CartService } from 'src/app/services/cart.service';
 import { emptyCart } from './../../store/actions/cart/cart.actions';
 import { Router } from '@angular/router';
@@ -33,11 +34,11 @@ export class PaymentComponent implements OnInit {
   
   checkout(amount:number | undefined, cart:Cart) {
     const strikeCheckout = (<any>window).StripeCheckout.configure({
-      key: 'pk_test_51Iw7ulF5GTmwNEHFICts8Ga8WXUhKKDeWmYseGABJ2Acf2A23r4SaEf690tZEBNTSMevFbtP7pxSSQxklEIs3haI00JkoFuj6b',
+      key: environment.SECRET_Pk,
       locale: 'auto',
       token:  (stripeToken: any)=> {
         console.log(stripeToken)
-        alert('Stripe token sucessfully!');
+        alert('payment token sucessfully!');
         this.cartService.payment(amount!*100,stripeToken.id).subscribe(()=>{
           this.emptyCart(cart)
         })
@@ -47,8 +48,8 @@ export class PaymentComponent implements OnInit {
     });
   
     strikeCheckout.open({
-      name: 'RemoteStack',
-      description: 'Payment widgets',
+      name: 'mekdi',
+      description: 'Payment',
       amount: amount! * 100
     });
   }
@@ -62,7 +63,7 @@ export class PaymentComponent implements OnInit {
 
       scr.onload = () => {
         this.strikeCheckout = (<any>window).StripeCheckout.configure({
-          key: 'pk_test_51Iw7ulF5GTmwNEHFICts8Ga8WXUhKKDeWmYseGABJ2Acf2A23r4SaEf690tZEBNTSMevFbtP7pxSSQxklEIs3haI00JkoFuj6b',
+          key: environment.SECRET_Pk,
           locale: 'auto',
           token: function (token: any) {
             console.log(token)

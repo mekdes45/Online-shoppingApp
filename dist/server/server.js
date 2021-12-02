@@ -12,11 +12,11 @@ import dotenv from "dotenv";
 import { authHandler } from "./middleware/auth.middleware.js";
 import { ProductModel } from "./schemas/product.schema.js";
 import Stripe from "stripe";
-// @ts-ignore
-const stripe = new Stripe("sk_test_51Iw7ulF5GTmwNEHFjuvsjbs4t1HqWnzks9ZySNOydSYLckGDOAp0SVhga4crz4YB4mkcjeCOX22ICD6EybEvm24M00BB1SAv6T", { apiVersion: "2020-08-27" });
 dotenv.config();
 const access_secret = process.env.ACCESS_TOKEN_SECRET;
 console.log(access_secret);
+const secret = process.env.SECRET_KEY;
+export const stripe = new Stripe(secret, { apiVersion: "2020-08-27" });
 const app = express();
 const server = http.createServer(app);
 import path from "path";
@@ -210,7 +210,7 @@ app.post("/api/payment", (req, res, next) => {
         .create({
         amount: req.body.amount,
         currency: "USD",
-        description: "One-time setup fee",
+        description: "Payment fee",
         source: req.body.id,
     })
         .then((charges) => {
